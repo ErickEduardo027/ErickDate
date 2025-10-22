@@ -5,6 +5,6 @@ export function useSearchShows(query: string, page = 1) {
     return useQuery({
     queryKey: ["search", query, page],
     queryFn: () => searchShows(query, page),
-    enabled: !!query, // Solo ejecuta si hay texto
+    enabled: !!query, // Solo busca si hay texto
     });
 }
