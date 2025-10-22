@@ -3,8 +3,9 @@ import { fetchShowDetails } from "../api/episodate";
 
 export function useShowDetails(permalink: string) {
     return useQuery({
-    queryKey: ["show", permalink],
+    queryKey: ["show-details", permalink],
     queryFn: () => fetchShowDetails(permalink),
     enabled: !!permalink,
     });
 }
+
