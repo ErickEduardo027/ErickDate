@@ -6,40 +6,40 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Episode {
-    season: number;
-    episode: number;
-    name: string;
-    air_date: string;
+  season: number;
+  episode: number;
+  name: string;
+  air_date: string;
 }
 
 export default function ShowDetails() {
-    const { id } = useParams<{ id: string }>(); // permalink
-    const navigate = useNavigate();
-    const { data, isLoading, isError } = useShowDetails(id ?? "");
-    const [selectedSeason, setSelectedSeason] = useState<number | "">("");
+  const { id } = useParams<{ id: string }>(); // permalink
+  const navigate = useNavigate();
+  const permalink = id ? decodeURIComponent(id) : ""; // 👈 decode permalink
+  const { data, isLoading, isError } = useShowDetails(permalink);
+  const [selectedSeason, setSelectedSeason] = useState<number | "">("");
 
-    if (isLoading) return <Spinner />;
-    if (isError || !data?.tvShow)
+  if (isLoading) return <Spinner />;
+  if (isError || !data?.tvShow)
     return <ErrorState message="Error al cargar detalles del show." />;
 
-    const show = data.tvShow;
-    const episodes: Episode[] = Array.isArray(show.episodes)
+  const show = data.tvShow;
+  const episodes: Episode[] = Array.isArray(show.episodes)
     ? show.episodes
     : [];
 
-  // Lista única de temporadas (tipado explícito)
-    const seasons: number[] = Array.from(
+  const seasons: number[] = Array.from(
     new Set<number>(episodes.map((ep) => ep.season))
-    ).sort((a, b) => a - b);
+  ).sort((a, b) => a - b);
 
-  // Episodios filtrados según la temporada
-    const filteredEpisodes =
+  const filteredEpisodes =
     selectedSeason !== ""
-        ? episodes.filter((ep) => ep.season === selectedSeason)
-        : [];
+      ? episodes.filter((ep) => ep.season === selectedSeason)
+      : [];
 
   return (
     <motion.div
+      key={id} // 👈 fuerza remount al cambiar de serie
       className="max-w-5xl mx-auto"
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
@@ -56,14 +56,12 @@ export default function ShowDetails() {
 
       {/* Contenido principal */}
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Imagen */}
         <img
           src={show.image_path || show.image_thumbnail_path}
           alt={show.name}
           className="w-full md:w-1/3 rounded-lg shadow-lg object-cover max-h-[550px]"
         />
 
-        {/* Información del show */}
         <div className="flex-1 min-w-0">
           <h1 className="text-3xl font-bold text-blue-400 mb-2">
             {show.name}
