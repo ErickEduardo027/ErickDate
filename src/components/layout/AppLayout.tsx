@@ -10,6 +10,11 @@ export default function AppLayout() {
     if (query.trim()) navigate(`/search?q=${encodeURIComponent(query)}`);
     };
 
+
+
+   /////////////// hola /////////////
+
+
     return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col">
       {/* Navbar */}
