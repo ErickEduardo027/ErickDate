@@ -17,28 +17,32 @@ export default function Home() {
         <h1 className="text-2xl font-bold mb-6 text-center text-blue-400">
         Series más populares
         </h1>
+<div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  {data.tv_shows.map((show: any) => (
+    <Link
+      key={show.id}
+      to={`/show/${show.permalink}`}
+      className="group relative bg-card rounded-xl overflow-hidden shadow-lg border border-white/5 hover:border-primary/40 transition-all duration-300 hover:scale-[1.03]"
+    >
+      <img
+        src={show.image_thumbnail_path}
+        alt={show.name}
+        className="w-full h-72 object-cover group-hover:opacity-70 transition-opacity duration-300"
+      />
+      {/* Overlay con gradiente */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {data.tv_shows.map((show: any) => (
-            <Link
-            key={show.id}
-            to={`/show/${show.permalink}`}
-            className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden 
-                        hover:scale-105 hover:shadow-lg hover:shadow-blue-900/30 
-                        transition-transform duration-300 block"
-            >
-            <img
-                src={show.image_thumbnail_path}
-                alt={show.name}
-                className="w-full h-64 object-cover"
-            />
-            <div className="p-3">
-                <h2 className="font-semibold text-lg truncate">{show.name}</h2>
-                <p className="text-sm text-neutral-400">{show.network}</p>
-            </div>
-            </Link>
-        ))}
-        </div>
+      {/* Texto */}
+      <div className="absolute bottom-0 left-0 p-3">
+        <h2 className="font-semibold text-lg text-white drop-shadow-md">
+          {show.name}
+        </h2>
+        <p className="text-xs text-neutral-300">{show.network}</p>
+      </div>
+    </Link>
+  ))}
+</div>
+
 
         <Pagination page={data.page} pages={data.pages} onPage={setPage} />
     </div>
